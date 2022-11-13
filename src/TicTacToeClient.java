@@ -41,6 +41,9 @@ public class TicTacToeClient {
         } 
         return square.text;
     }
+    /**
+     * Display the current board state, with 1, 2, 3 and a, b, c labels. To let player know what to enter in user input
+     */
     private void DisplayBoard() {
         System.out.println("Board:");
         System.out.println("   " + "1" + "   " + "2" + "   " + "3");
@@ -50,7 +53,11 @@ public class TicTacToeClient {
         System.out.println("   " + "-----------");
         System.out.println("C  " + Display(board[6]) + " | " + Display(board[7]) + " | " + Display(board[8]));
     }
-    
+    /**
+     * This method is used to get the user input and return the index of the array.
+     * The switch statement is used to check the user input and return the index of the array.
+     * If the user input is not valid, the method will be called again.
+     */
     private int getPlayerInput() {
         System.out.print("Please enter your move (Like 2A, 3C, etc.): ");
         //Get user Intput
@@ -79,6 +86,19 @@ public class TicTacToeClient {
                 return getPlayerInput();
         }
     }
+    /**
+     * This code is the main game loop. It listens for messages from the server and responds accordingly. 
+     * The first if statement checks to see if the message starts with GAMEACK, which means that both players have connected and it's time to start playing. 
+     * If this is true then we get player input, set their mark on the board, and send a move request to the server. 
+     * MOVEACK, which means that our last move was valid so we display an updated board and wait for opponent moves. 
+     * MOVEDENIED which means our last move was invalid so we need to redraw the board with any new marks that were placed since our last turn as well as tell them they made an invalid move and ask them again what they want to do.
+     * MOVEDATA which tells us where our opponent moved so we update our board with their mark in that location and ask for player input again because it's now their turn again. 
+     * SERVERMESSAGE Prints out whatever message the server sends us. 
+     * GAMESTATUS:WIN displays a winning message when the player wins 
+     * GAMESTATUS:DEFEAT displays a losing message when the player loses 
+     * GAMESTATUS:TIE displays a tie message when there are no more moves left but nobody has won yet
+     * @throws Exception
+     */
     public void play() throws Exception {
         try {
             var response = in.nextLine();
