@@ -6,6 +6,21 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch TicTacToeClient",
+            "request": "launch",
+            "mainClass": "TicTacToeClient",
+            "projectName": "TicTacToeSeverJava_3a013578",
+            "args": ["127.0.0.1"]
+        },
+        {
+            "type": "java",
+            "name": "Launch TicTacToeServer",
+            "request": "launch",
+            "mainClass": "TicTacToeServer",
+            "projectName": "TicTacToeSeverJava_3a013578"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -15,21 +30,6 @@
             "name": "Launch App",
             "request": "launch",
             "mainClass": "App",
-            "projectName": "Server_61cf0e2c"
-        },
-        {
-            "type": "java",
-            "name": "Launch TicTacToeClient",
-            "request": "launch",
-            "mainClass": "TicTacToeClient",
-            "projectName": "Server_61cf0e2c",
-            "args": ["127.0.0.1"]
-        },
-        {
-            "type": "java",
-            "name": "Launch TicTacToeServer",
-            "request": "launch",
-            "mainClass": "TicTacToeServer",
             "projectName": "Server_61cf0e2c"
         }
     ]

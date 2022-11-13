@@ -51,21 +51,6 @@ public class TicTacToeClient {
         System.out.println("C  " + Display(board[6]) + " | " + Display(board[7]) + " | " + Display(board[8]));
     }
     
-    private void gameOver(String Player1, String Player2){
-        var response = in.nextLine();
-        if(response.startsWith("VICTORY")){
-            System.out.println("You win!");
-        }
-        else if(response.startsWith("DEFEAT")){
-            System.out.println("You lose!");
-        }
-        else if(response.startsWith("TIE")){
-            System.out.println("Tied!");
-        }
-
-        input.close();
-    }
-    
     private int getPlayerInput() {
         System.out.print("Please enter your move (Like 2A, 3C, etc.): ");
         //Get user Intput
@@ -94,15 +79,6 @@ public class TicTacToeClient {
                 return getPlayerInput();
         }
     }
-    /**
-     * The main thread of the client will listen for messages from the server. The
-     * first message will be a "WELCOME" message in which we receive our mark. Then
-     * we go into a loop listening for any of the other messages, and handling each
-     * message appropriately. The "VICTORY", "DEFEAT", "TIE", and
-     * "OTHER_PLAYER_LEFT" messages will ask the user whether or not to play another
-     * game. If the answer is no, the loop is exited and the server is sent a "QUIT"
-     * message.
-     */
     public void play() throws Exception {
         try {
             var response = in.nextLine();
