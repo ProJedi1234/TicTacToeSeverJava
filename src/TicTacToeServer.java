@@ -40,14 +40,64 @@ class Game {
     Player currentPlayer;
 
     public boolean hasWinner() {
-        return (board[0] != null && board[0] == board[1] && board[0] == board[2])
-                || (board[3] != null && board[3] == board[4] && board[3] == board[5])
-                || (board[6] != null && board[6] == board[7] && board[6] == board[8])
-                || (board[0] != null && board[0] == board[3] && board[0] == board[6])
-                || (board[1] != null && board[1] == board[4] && board[1] == board[7])
-                || (board[2] != null && board[2] == board[5] && board[2] == board[8])
-                || (board[0] != null && board[0] == board[4] && board[0] == board[8])
-                || (board[2] != null && board[2] == board[4] && board[2] == board[6]);
+        for (int i = 0; i < 3; i++) {
+            boolean empty = false;
+
+            for (int j = 0; j < 3; j++) {
+                if (board[i + j] == null) {
+                    empty = true;
+                    break;
+                }
+            }
+            if (!empty && board[i] == board[i + 1] && board [i + 1] == board[i + 2])
+                return true;
+        }
+        for (int i = 0; i < 3; i++) {
+            boolean empty = false;
+
+            for (int j = 0; j < 3; j++) {
+                if (board[i + j] == null) {
+                    empty = true;
+                    break;
+                }
+            }
+            if (!empty && board[0 + i] == board[3 + i] && board [3 + i] == board[6 + i])
+                return true;
+        }
+        // check diagonal
+        int[] diagonal1 = {0, 4, 8};
+        int[] diagonal2 = {3, 4, 6};
+        boolean empty = false;
+
+        for (int i : diagonal1) {
+            if (board[i] == null) {
+                empty = true;
+                break;
+            }
+        }
+        if (!empty && board[diagonal1[0]] == board[diagonal1[1]] && board[diagonal1[1]] == board[diagonal1[2]]) {
+            return true;
+        }
+        empty = false;
+
+        for (int i : diagonal1) {
+            if (board[i] == null) {
+                empty = true;
+                break;
+            }
+        }
+        if (!empty && board[diagonal2[0]] == board[diagonal2[1]] && board[diagonal2[1]] == board[diagonal2[2]]) {
+            return true;
+        }
+        return false;
+        // return (board[0] != null && board[0] == board[1] && board[0] == board[2])
+        //         || (board[3] != null && board[3] == board[4] && board[3] == board[5])
+        //         || (board[6] != null && board[6] == board[7] && board[6] == board[8])
+        //         || (board[0] != null && board[0] == board[3] && board[0] == board[6])
+        //         || (board[1] != null && board[1] == board[4] && board[1] == board[7])
+        //         || (board[2] != null && board[2] == board[5] && board[2] == board[8])
+        //         || (board[0] != null && board[0] == board[4] && board[0] == board[8])
+        //         || (board[2] != null && board[2] == board[4] && board[2] == board[6]);
     }
 
     public boolean boardFilledUp() {

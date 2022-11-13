@@ -49,6 +49,15 @@ public class TicTacToeClient {
         var boardPanel = new JPanel();
         boardPanel.setBackground(Color.black);
         boardPanel.setLayout(new GridLayout(3, 3, 2, 2));
+
+        System.out.print("Board:");
+        System.out.print("   " + "1" + "   " + "2" + "   " + "3");
+        System.out.print("A  " + board[6] + " | " + board[7] + " | " + board[8]);
+        System.out.print("   " + "-----------");
+        System.out.print("B  " + board[3] + " | " + board[4] + " | " + board[5]);
+        System.out.print("   " + "-----------");
+        System.out.print("C  " + board[0] + " | " + board[1] + " | " + board[2]);
+
         for (var i = 0; i < board.length; i++) {
             final int j = i;
             board[i] = new Square();
