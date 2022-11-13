@@ -9,8 +9,24 @@
             "name": "Launch TicTacToeClient",
             "request": "launch",
             "mainClass": "TicTacToeClient",
+            "projectName": "Server_61cf0e2c"
+        },
+        {
+            "type": "java",
+            "name": "Launch TicTacToeServer",
+            "request": "launch",
+            "mainClass": "TicTacToeServer",
+            "projectName": "Server_61cf0e2c"
+        },
+        {
+            "type": "java",
+            "name": "Launch TicTacToeClient",
+            "request": "launch",
+            "mainClass": "TicTacToeClient",
             "projectName": "TicTacToeSeverJava_3a013578",
-            "args": ["127.0.0.1"]
+            "args": [
+                "127.0.0.1"
+            ]
         },
         {
             "type": "java",
