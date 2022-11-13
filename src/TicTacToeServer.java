@@ -104,10 +104,23 @@ class Game {
         } else if (player.opponent == null) {
             throw new IllegalStateException("You don't have an opponent yet");
         } else if (board[location] != null) {
-            throw new IllegalStateException("MOVEDENIED");
+            throw new IllegalStateException("MOVEDENIED " + getBoard());
         }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
+    }
+    public String getBoard() {
+        String boardString = "";
+
+        for (Player player : board) {
+            if (player == null) {
+                boardString += 0 + " ";
+            } else {
+                boardString = String.valueOf(player.mark) + " ";
+            }
+        }
+
+        return boardString.trim();
     }
 
     /**

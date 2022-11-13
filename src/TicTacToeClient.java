@@ -125,6 +125,15 @@ public class TicTacToeClient {
                 } else if (response.startsWith("MOVEDENIED")) {
                     System.out.print("\033[2J\033[1;1H");
                     System.out.println("Move denied. Try again.");
+                    String boardText = response.substring(11);
+                    String[] boardData = boardText.split(" ");
+                    for (int i = 0; i < boardData.length; i++) {
+                        if (boardData[i].toCharArray()[0] != '0') {
+                            board[i].setText(boardData[i].toCharArray()[0]);
+                        } else {
+                            board[i].setText(' ');
+                        }
+                    }
                     DisplayBoard();
                     int move = getPlayerInput();                    
                     board[move].setText(mark);
