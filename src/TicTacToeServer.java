@@ -21,7 +21,7 @@ public class TicTacToeServer {
 
     public static void main(String[] args) throws Exception {
         try (var listener = new ServerSocket(58901)) {
-            System.out.println("Tic Tac Toe Server is Running...");
+            System.out.println("Game Server is Ready...");
             var pool = Executors.newFixedThreadPool(200);
             while (true) {
                 Game game = new Game();
@@ -40,6 +40,7 @@ class Game {
     Player currentPlayer;
 
     public boolean hasWinner() {
+        // horizontal
         for (int i = 0; i < 3; i++) {
             boolean empty = false;
 
@@ -52,11 +53,12 @@ class Game {
             if (!empty && board[i] == board[i + 1] && board [i + 1] == board[i + 2])
                 return true;
         }
+        //vertical
         for (int i = 0; i < 3; i++) {
             boolean empty = false;
 
             for (int j = 0; j < 3; j++) {
-                if (board[i + j] == null) {
+                if (board[i + j*3] == null) {
                     empty = true;
                     break;
                 }
@@ -90,14 +92,6 @@ class Game {
             return true;
         }
         return false;
-        // return (board[0] != null && board[0] == board[1] && board[0] == board[2])
-        //         || (board[3] != null && board[3] == board[4] && board[3] == board[5])
-        //         || (board[6] != null && board[6] == board[7] && board[6] == board[8])
-        //         || (board[0] != null && board[0] == board[3] && board[0] == board[6])
-        //         || (board[1] != null && board[1] == board[4] && board[1] == board[7])
-        //         || (board[2] != null && board[2] == board[5] && board[2] == board[8])
-        //         || (board[0] != null && board[0] == board[4] && board[0] == board[8])
-        //         || (board[2] != null && board[2] == board[4] && board[2] == board[6]);
     }
 
     public boolean boardFilledUp() {
@@ -110,7 +104,7 @@ class Game {
         } else if (player.opponent == null) {
             throw new IllegalStateException("You don't have an opponent yet");
         } else if (board[location] != null) {
-            throw new IllegalStateException("Cell already occupied");
+            throw new IllegalStateException("MOVEDENIED");
         }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
@@ -142,7 +136,7 @@ class Game {
                 e.printStackTrace();
             } finally {
                 if (opponent != null && opponent.output != null) {
-                    opponent.output.println("OTHER_PLAYER_LEFT");
+                    opponent.output.println("CLIENTEXIT");
                 }
                 try {
                     socket.close();
@@ -154,21 +148,21 @@ class Game {
         private void setup() throws IOException {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WELCOME " + mark);
+            output.println("ACK:  " + mark);
             if (mark == 'X') {
                 currentPlayer = this;
-                output.println("MESSAGE Waiting for opponent to connect");
+                output.println("SERVERMESSAGE: Waiting for opponent to connect");
             } else {
                 opponent = currentPlayer;
                 opponent.opponent = this;
-                opponent.output.println("MESSAGE Your move");
+                opponent.output.println("GAMEACK");
             }
         }
 
         private void processCommands() {
             while (input.hasNextLine()) {
                 var command = input.nextLine();
-                if (command.startsWith("QUIT")) {
+                if (command.startsWith("CLIENTEXIT")) {
                     return;
                 } else if (command.startsWith("MOVE")) {
                     processMoveCommand(Integer.parseInt(command.substring(5)));
@@ -179,17 +173,17 @@ class Game {
         private void processMoveCommand(int location) {
             try {
                 move(location, this);
-                output.println("VALID_MOVE");
-                opponent.output.println("OPPONENT_MOVED " + location);
+                output.println("MOVEACK");
+                opponent.output.println("MOVEDATA " + location);
                 if (hasWinner()) {
-                    output.println("VICTORY");
-                    opponent.output.println("DEFEAT");
+                    output.println("GAMESTATUS:WIN");
+                    opponent.output.println("GAMESTATUS:DEFEAT");
                 } else if (boardFilledUp()) {
-                    output.println("TIE");
-                    opponent.output.println("TIE");
+                    output.println("GAMESTATUS:TIE");
+                    opponent.output.println("GAMESTATUS:TIE");
                 }
             } catch (IllegalStateException e) {
-                output.println("MESSAGE " + e.getMessage());
+                output.println(e.getMessage());
             }
         }
     }
