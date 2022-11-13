@@ -6,17 +6,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 
-/**
- * A server for a multi-player tic tac toe game. Loosely based on an example in
- * Deitel and Deitel’s “Java How to Program” book. For this project I created a
- * new application-level protocol called TTTP (for Tic Tac Toe Protocol), which
- * is entirely plain text. The messages of TTTP are:
- *
- * Client -> Server MOVE <n> QUIT
- *
- * Server -> Client WELCOME <char> VALID_MOVE OTHER_PLAYER_MOVED <n>
- * OTHER_PLAYER_LEFT VICTORY DEFEAT TIE MESSAGE <text>
- */
 public class TicTacToeServer {
 
     public static void main(String[] args) throws Exception {
@@ -39,6 +28,9 @@ class Game {
 
     Player currentPlayer;
 
+    /*
+     * uses loops to check if there is a winner
+     */
     public boolean hasWinner() {
         // horizontal
         for (int i = 0; i < 3; i++) {
@@ -53,7 +45,7 @@ class Game {
             if (!empty && board[i] == board[i + 1] && board [i + 1] == board[i + 2])
                 return true;
         }
-        //vertical
+        //Check vertical if someone wins
         for (int i = 0; i < 3; i++) {
             boolean empty = false;
 
@@ -97,18 +89,25 @@ class Game {
     public boolean boardFilledUp() {
         return Arrays.stream(board).allMatch(p -> p != null);
     }
-
+    /*
+     * try to make a move and check for illegal move exceptions
+     * on exception, MOVEDENIED is sent and current version of board is sent
+     */
     public synchronized void move(int location, Player player) {
         if (player != currentPlayer) {
-            throw new IllegalStateException("Not your turn");
+            throw new IllegalStateException("MOVEDENIED " + getBoard());
         } else if (player.opponent == null) {
-            throw new IllegalStateException("You don't have an opponent yet");
+            throw new IllegalStateException("MOVEDENIED " + getBoard());
         } else if (board[location] != null) {
             throw new IllegalStateException("MOVEDENIED " + getBoard());
         }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
     }
+    /*
+     * Prints out board as string for easy sending
+     * Seperated by spaces
+     */
     public String getBoard() {
         String boardString = "";
 
@@ -160,7 +159,9 @@ class Game {
                 }
             }
         }
-
+        /*
+        * Set up a new client by sending acknowledgement and piece
+        */
         private void setup() throws IOException {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -174,7 +175,11 @@ class Game {
                 opponent.output.println("GAMEACK");
             }
         }
-
+        /*
+         * Check for new commands from network
+         * CLIENTEXIT defines exit
+         * MOVE defines new move by the client
+         */
         private void processCommands() {
             while (input.hasNextLine()) {
                 var command = input.nextLine();
@@ -185,7 +190,11 @@ class Game {
                 }
             }
         }
-
+    /**
+    * This method is responsible for processing the move command.
+    * It will try to process the move from the client, if it can't it will throw an exception and print out the message.
+    * If there is no winner or tie yet, then it will send back a MOVEACK and MOVEDATA to both players.
+    */
         private void processMoveCommand(int location) {
             try {
                 move(location, this);
