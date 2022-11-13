@@ -114,7 +114,7 @@ class Game {
 
         for (Player player : board) {
             if (player == null) {
-                boardString += 0 + " ";
+                boardString += "n" + " ";
             } else {
                 boardString = String.valueOf(player.mark) + " ";
             }
