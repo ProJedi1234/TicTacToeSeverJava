@@ -104,7 +104,7 @@ public class TicTacToeClient {
                     String boardText = response.substring(11);
                     String[] boardData = boardText.split(" ");
                     for (int i = 0; i < boardData.length; i++) {
-                        if (boardData[i].toCharArray()[0] != 'n') {
+                        if (boardData[i].toCharArray()[0] != '0') {
                             board[i].setText(boardData[i].toCharArray()[0]);
                         } else {
                             board[i].setText(' ');

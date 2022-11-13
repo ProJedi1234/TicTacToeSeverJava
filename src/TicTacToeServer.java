@@ -112,14 +112,17 @@ class Game {
     public String getBoard() {
         String boardString = "";
 
-        for (Player player : board) {
+        for (int i = 0; i < board.length; i++) {
+            Player player = board[i];
+
             if (player == null) {
-                boardString += "n" + " ";
+                boardString += String.valueOf('0') + " ";
+                System.out.println("Null found");
             } else {
-                boardString = String.valueOf(player.mark) + " ";
+                boardString += String.valueOf(player.mark) + " ";
             }
         }
-
+        
         return boardString.trim();
     }
 
